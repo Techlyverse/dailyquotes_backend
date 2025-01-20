@@ -1,10 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const authorRoutes = require('./routes/quotesRoutes');
-const messages = require('./utils/messages');
-const response = require('./utils/response');
-const statusCodes = require('./utils/statusCodes');
-require('./config/db');
+const authorRoutes = require('../routes/quotesRoutes');
+const messages = require('../utils/messages');
+const response = require('../utils/response');
+const statusCodes = require('../utils/statusCodes');
+require('../config/db');
 require('dotenv').config(); 
 
 const app = express();
