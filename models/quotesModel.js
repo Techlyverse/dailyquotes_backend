@@ -26,6 +26,6 @@ const QuoteSchema = new Schema({
 });
 
 
-const Quotes = mongoose.model('Quotes', QuoteSchema);
+const Quotes = mongoose.model('Quotes', QuoteSchema, 'quotes');
 
 module.exports = Quotes;
