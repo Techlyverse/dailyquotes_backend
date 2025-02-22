@@ -36,13 +36,25 @@ exports.createQuotes = async (req, res) => {
 
 exports.getAllQuotes = async (req, res) => {
   try {
-    const quotes = await quotesService.getAllQuotes();
+    let { page, limit } = req.query;
+    page = parseInt(page) || 1;
+    limit = parseInt(limit) || 10;
+
+    const result = await quotesService.getAllQuotes(page, limit);
+
     return response.successResponse(
       res,
       statusCodes.SUCCESS.OK,
       messages.SUCCESS.FETCH_ALL,
-      quotes
-    );
+      {
+        total: result.total,
+        page: result.page,
+        totalPages: Math.ceil(result.total / result.limit),
+     }, 
+      {
+        quotes: result.quotes,
+
+      });
   } catch (error) {
     console.error(messages.ERROR.FETCH_ALL, error);
     return response.errorResponse(
@@ -53,6 +65,7 @@ exports.getAllQuotes = async (req, res) => {
     );
   }
 };
+
 
 exports.updateQuote = async (req, res) => {
   const { id } = req.params;
