@@ -116,3 +116,29 @@ exports.deleteQuote = async (req, res) => {
     );
   }
 };
+exports.getQuotesStats = async (req, res) => {
+  try {
+    const stats = await quotesService.getQuotesStatsByAuthor();
+    if (!stats || stats.length === 0) {
+      return response.errorResponse(
+        res,
+        statusCodes.CLIENT_ERROR.NOT_FOUND,
+        messages.ERROR.NOT_FOUND
+      );
+    }
+    return response.successResponse(
+      res,
+      statusCodes.SUCCESS.OK,
+      messages.SUCCESS.FETCH_ALL,
+      stats
+    );
+  } catch (error) {
+    console.error(messages.ERROR.FETCH_ALL, error);
+    return response.errorResponse(
+      res,
+      statusCodes.SERVER_ERROR.INTERNAL,
+      messages.ERROR.SERVER_ERROR,
+      error.message
+    );
+  }
+};

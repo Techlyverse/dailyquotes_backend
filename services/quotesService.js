@@ -14,3 +14,41 @@ exports.updateQuoteById = async (id, data) => {
 exports.deleteQuoteById = async (id) => {
   return await Quotes.findByIdAndDelete(id);
 };
+exports.getQuotesStatsByAuthor = async () => {
+  return await Quotes.aggregate([
+
+    {
+      $group: {
+        _id: "$author", 
+        totalQuotes: { $sum: 1 },
+        quotes: { $push: "$quotes" }, 
+      },
+    },
+
+    {
+      $project: {
+        author: "$_id", 
+        totalQuotes: 1, 
+        avgQuoteLength: {
+          $avg: {
+            $map:{
+              input:"$quotes",
+              as: "q",
+              in:{
+                $strLenCP: "$$q"
+              }
+            },
+
+          },
+        },
+        _id: 0,
+      },
+    },
+
+    {
+      $sort: {
+        totalQuotes: 1,
+      },
+    },
+  ]);
+};
